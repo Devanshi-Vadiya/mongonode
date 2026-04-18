@@ -10,4 +10,8 @@ router.get("/:id", controller.getNoteById);
 
 router.put("/:id", controller.replaceNote);
 router.patch("/:id", controller.updateNote);
+
+
+
+router.delete("/bulk", controller.deleteNotesBulk);
 module.exports = router;

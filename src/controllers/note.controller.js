@@ -181,3 +181,36 @@ exports.updateNote = async (req, res) => {
     res.status(500).json({ success: false, message: err.message, data: null });
   }
 };
+
+// 7. Delete one
+exports.deleteNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!isValidId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid note ID",
+        data: null,
+      });
+    }
+
+    const note = await Note.findByIdAndDelete(id);
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Note deleted successfully",
+      data: null,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message, data: null });
+  }
+};
