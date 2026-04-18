@@ -1,31 +1,26 @@
 const mongoose = require("mongoose");
 
-    const NotesSchema = new mongoose.Schema(
-{
-        title: {
-            type: String,
-            required: true
-    },content: {
-        type: String,
-        required: true
+const noteSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Title is required"],
+    },
+    content: {
+      type: String,
+      required: [true, "Content is required"],
     },
     category: {
-        type: String,
-        enum: ["Personal", "Work", "STUDY"],
-        default: "Work"
+      type: String,
+      enum: ["work", "personal", "study"],
+      default: "personal",
     },
-    isPinned: {type: Boolean, default: false}
-},
-    {timestamps: true}
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
 
-)
-
-
-
-
-
-
-
-const Notes = mongoose.model("Note", NotesSchema);
-
-module.exports = Notes;
+module.exports = mongoose.model("Note", noteSchema);

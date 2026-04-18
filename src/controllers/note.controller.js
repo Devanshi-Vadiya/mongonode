@@ -1,26 +1,29 @@
 const mongoose = require("mongoose");
+const Note = require("../models/note.model");
 
-const noteSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: [true, "Title is required"],
-    },
-    content: {
-      type: String,
-      required: [true, "Content is required"],
-    },
-    category: {
-      type: String,
-      enum: ["work", "personal", "study"],
-      default: "personal",
-    },
-    isPinned: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  { timestamps: true }
-);
+const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-module.exports = mongoose.model("Note", noteSchema);
+// 1. Create note
+exports.createNote = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({
+        success: false,
+        message: "Title and content are required",
+        data: null,
+      });
+    }
+
+    const note = await Note.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      message: "Note created successfully",
+      data: note,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message, data: null });
+  }
+};
